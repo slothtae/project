@@ -5,8 +5,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:terra_vision/login_screen.dart';
 
 
-
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 

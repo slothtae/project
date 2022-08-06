@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:terra_vision/register_screen.dart';
+import 'package:terra_vision/home/home_screen.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -21,11 +22,11 @@ class LoginScreen extends StatelessWidget {
                   Color(0xFFEF9A94),
                   Color(0xFFFFEBEE),
                 ]
-            )
+            ),
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(top:100, left: 40, right: 40),
+            padding: const EdgeInsets.only(top:100, left: 40, right: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:  [
@@ -121,7 +122,10 @@ class LoginScreen extends StatelessWidget {
                   height: 50,
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>HomeScreen()), (route)=>true);
+
+                    },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty
                           .all<Color>(Color(0xff4A148C)),

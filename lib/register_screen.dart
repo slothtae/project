@@ -17,10 +17,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     "None"
   ];
 
-
   @override
   Widget build(BuildContext context) {
-
     return  Scaffold(
       body: Container(
           height: MediaQuery.of(context).size.height,
@@ -50,7 +48,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       ),
                     ),
-
                   const SizedBox(
                     height:30,
                   ),
@@ -200,18 +197,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.white,
                             fontSize: 18,
                             fontFamily: "PlayFair Display",
-
                           ),
-
                         ),
-
                     ),
-
                   ),
                   const SizedBox(
                     height: 5,
                   )
-
                 ],
               ),
       ),
