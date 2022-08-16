@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'category.dart';
+import 'package:terra_vision/home/Dashboard_elements/dashboard.dart';
+import 'package:terra_vision/utilities/5_day_weather_list.dart';
+import '../utilities/category.dart';
 
 
 
@@ -10,16 +12,32 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+final _scaffoldKey= GlobalKey<ScaffoldState>();
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: SizedBox(
+        width: 100,
+        height: 50,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blue.shade200)
+          ),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const DashBoardScreen()), (route)=>true);
+          },
+          child: Icon(Icons.dashboard,color: Colors.blue.shade900,),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      key:_scaffoldKey,
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
           Container(
-             height: MediaQuery.of(context).size.height*0.45,
+             height: MediaQuery.of(context).size.height*0.42,
               decoration: const BoxDecoration(
                   image:DecorationImage(
                     image:AssetImage("images/cloud.jpg",),
@@ -33,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),child:Stack(
             children:
             [
-              Padding(
+             /* Padding(
                 padding: const EdgeInsets.only(top:100, left:20, right:20),
                 child: TextField(
                   decoration: InputDecoration(
@@ -58,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ),
                 ),
-              ),
+              ),*/
               Padding(
-                padding: const EdgeInsets.only(top:250),
+                padding: const EdgeInsets.only(top:130),
                 child: OverflowBox(
                   minWidth: 0.0,
                   maxWidth: (MediaQuery.of(context).size.width),
@@ -76,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children:  [
                           const SizedBox(
-                            height:10,
+                            height:20,
                           ),
                           const Text(
                               'Guwahati',
@@ -139,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top:100, left:10),
+       /*   Padding(
+            padding: const EdgeInsets.only(top:90, left:10),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -159,17 +177,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
-                  children:  const [
-                   Category_card(image:"images/location.png",text:"Location"),
-                   Category_card(image:"images/notification.jpg",text:"Notification"),
-                   Category_card(image:"images/sos.jpg",text:"SOS"),
-                   Category_card(image:"images/profile.jpg",text:"Profile"),
-                   Category_card(image: "images/settings.png",text:"Settings"),
+                  children:   [
+                   Category_card(image:"images/location.png",text:"Location", skey:_scaffoldKey),
+                   Category_card(image:"images/notification.jpg",text:"Notification", skey:_scaffoldKey),
+                   Category_card(image:"images/sos.jpg",text:"SOS", skey: _scaffoldKey),
+                   Category_card(image:"images/profile.jpg",text:"Profile", skey:_scaffoldKey),
+                   Category_card(image: "images/settings.png",text:"Settings", skey: _scaffoldKey,),
                   ],
                   ),
+                ),*/
+          Padding(
+            padding: const EdgeInsets.only(top:60, left:15),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Next 5 days".toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GridView(
+              scrollDirection: Axis.horizontal,
+              physics: const ScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                mainAxisExtent:160,
+                crossAxisCount: 1,
+              ),
+              children:   const [
+                WeatherList(day:"Tuesday",image:"images/weather.jpg", temp:"20 \u2103",),
+                WeatherList(day:"Wednesday",image:"images/weather.jpg", temp:"34 \u2103"),
+                WeatherList(day:"Thursday",image:"images/weather.jpg", temp:"25\u2103"),
+                WeatherList(day:"Friday",image:"images/weather.jpg", temp:"31 \u2103"),
+                WeatherList(day:"Saturday",image:"images/weather.jpg", temp:"18 \u2103"),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 100,
+          )
         ],
       ),
+
+
       );
   }
 }

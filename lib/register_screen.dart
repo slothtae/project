@@ -136,10 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       )
                   ),
-                  const SizedBox(
-                    height:20,
-                  ),
-                Container(
+              /*  Container(
                   padding:  const EdgeInsets.symmetric(vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.red.shade50,
@@ -170,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onChanged: (_){},
                     ),
                   ),
-                ),
+              ),*/
                  const SizedBox(
                     height:40,
                   ),
@@ -178,7 +175,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const RegisterScreen()), (route)=>true);
+                        },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty
                               .all<Color>(Color(0xff4A148C)),

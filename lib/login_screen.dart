@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:terra_vision/register_screen.dart';
-import 'package:terra_vision/home/home_screen.dart';
+import 'package:terra_vision/home/home_screen_normal_user.dart';
 
 
 class LoginScreen extends StatelessWidget {
