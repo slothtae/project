@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:core';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:terra_vision/home/Dashboard_elements/dashboard.dart';
 import 'package:terra_vision/utilities/5_day_weather_list.dart';
+import '../helper_models/weather_model.dart';
 import '../utilities/category.dart';
-
+import 'package:terra_vision/services/geolocation.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -12,9 +19,88 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+
+// Variable declaration
 final _scaffoldKey= GlobalKey<ScaffoldState>();
+//late Position? _currentPosition=null;
+late Future<WeatherModel?> obj;
+
+
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  //This function gives the latitude and longitude of the device
+  /*_determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    print("Entering the determinePosition function");
+    _currentPosition=await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true).then((value) { print("Inside then");});
+    print("Hi");
+    print(_currentPosition?.latitude);
+    print(_currentPosition?.longitude);
+    print("hey");
+  }*/
+  Position _currentPosition = const Position(latitude: 0, longitude: 0, altitude: 0, accuracy: 0, speed: 0, heading: 0,  speedAccuracy: 2, timestamp: null);
+
+  void _getPermissions() async{
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Location permissions are denied');
+      }else if(permission == LocationPermission.deniedForever){
+        print("'Location permissions are permanently denied");
+      }else{
+        print("GPS Location service is granted");
+      }
+    }else{
+      print("GPS Location permission granted.");
+    }
+  }
+
+  void _getCurrentLocation() async{
+    print("Entering getcurrentlocation");
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true).then((position) {
+      _currentPosition = position;
+      print(_currentPosition);
+    }).catchError((e) {
+      print(e);
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getPermissions();
+    _getCurrentLocation();
+
+  }
+  /*void initState ()
+  {
+    print("hello world");
+    //_determinePosition();
+    obj= WeatherApiCall();
+    super.initState();
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,8 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             height:20,
                           ),
-                          const Text(
-                              'Guwahati',
+                           const Text(
+                              "Sdfhdshfj",
                               style:TextStyle(
                                 color: Colors.grey,
                                 fontSize: 23,
@@ -222,8 +308,23 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-
-
       );
   }
+}
+
+Future<WeatherModel?> WeatherApiCall()async{
+  var api_url='https://api.openweathermap.org/data/2.5/weather?lat=26.1296084&lon=91.6191235&appid=e4b7e9a7c209d3153d1964b820ffa2f3';
+   var response;
+   print(api_url);
+   response=
+      await http.get(Uri.parse(api_url)).whenComplete((){print(response.body);});
+  //print(response);
+  if (response.statusCode == 200) {
+    WeatherModel model= WeatherModel.fromJson(jsonDecode(response.body));
+    print(model);
+    return model;
+  }
+  else
+    print(response.statusCode);
+
 }
