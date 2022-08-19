@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:terra_vision/home/Dashboard_elements/profile.dart';
 
+import '../home/Dashboard_elements/reporting_camera.dart';
+
 class Category_card extends StatelessWidget {
   final String image;
   final String text;
@@ -16,7 +18,7 @@ class Category_card extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-       /* if(text=="SOS")
+        if(text=="SOS")
           {
             skey.currentState.showSnackBar(
               SnackBar(
@@ -62,12 +64,20 @@ class Category_card extends StatelessWidget {
                 )
               )
             );
-          }*/
-        if(text=="Profile")
+          }
+        else if(text=="Reporting")
+        {
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Report()), (route)=>true);
+          //openDialog();
+
+        }
+       else if(text=="Profile")
           {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Profile()), (route)=>true);
 
           }
+
+
       },
       child: Padding(
         padding: const EdgeInsets.only(left:8, right:8),
@@ -84,9 +94,12 @@ class Category_card extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(image,
-                  height:30,
-                  width:50,
+                SizedBox(
+                  height:40,
+                  width:40,
+                  child: Image.asset(image,
+
+                  ),
                 ),
                 const SizedBox(
                   height:8,
@@ -106,4 +119,22 @@ class Category_card extends StatelessWidget {
       ),
     );
   }
+
+  void openDialog()=> SimpleDialog(
+    title: const Text('Camera'),
+    children: [
+      SimpleDialogOption(
+        onPressed: (){},
+        child: const Text('Before Flood'),
+      ),
+      const Divider(
+       height: 3,
+      ),
+       SimpleDialogOption(
+        onPressed: (){},
+        child: const Text('After Flood'),
+      ),
+    ],
+  );
+
 }

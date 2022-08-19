@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:terra_vision/helper_models/5_day_weather_model.dart';
 import 'package:terra_vision/home/Dashboard_elements/dashboard.dart';
 import 'package:terra_vision/utilities/5_day_weather_list.dart';
 import '../helper_models/weather_model.dart';
@@ -60,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }*/
   Position _currentPosition = const Position(latitude: 0, longitude: 0, altitude: 0, accuracy: 0, speed: 0, heading: 0,  speedAccuracy: 2, timestamp: null);
 
-  void _getPermissions() async{
+  Future<void> _getPermissions() async{
+    print("Entered get persmissions");
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -70,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }else if(permission == LocationPermission.deniedForever){
         print("'Location permissions are permanently denied");
       }else{
+        _getCurrentLocation();
         print("GPS Location service is granted");
       }
     }else{
@@ -77,20 +80,91 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _getCurrentLocation() async{
+  Future<void> _getCurrentLocation() async{
     print("Entering getcurrentlocation");
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true).then((position) {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.lowest, forceAndroidLocationManager: true,).then((position) {
       _currentPosition = position;
       print(_currentPosition);
     }).catchError((e) {
       print(e);
     });
+    print("Out of getcurrent location");
   }
+
+  Future<WeatherModel?> WeatherApiCall()async{
+    print('Entereing weather api call');
+    var api_url='https://api.openweathermap.org/data/2.5/weather?lat=${_currentPosition.latitude}&lon=${_currentPosition.longitude}&appid=e4b7e9a7c209d3153d1964b820ffa2f3&units=metric';
+    var response = await http.get(Uri.parse(api_url), headers: {'Accept': 'application/json'});
+    print(api_url);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      print(data);
+      WeatherModel model = WeatherModel.fromJson(data);
+      print(model.name);
+      return model;
+    }
+    else
+    {
+      print(response.statusCode);
+      return null;
+    }
+
+  }
+  Future<WeatherModel2?> Days5WeatherApiCall()async{
+    var apiUrl='https://api.openweathermap.org/data/2.5/forecast?lat=${_currentPosition.latitude}&lon=${_currentPosition.longitude}&appid=e4b7e9a7c209d3153d1964b820ffa2f3';
+    var response = await http.get(Uri.parse(apiUrl), headers: {'Accept': 'application/json'});
+    print(apiUrl);
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+      print(data);
+      WeatherModel2 model = WeatherModel2.fromJson(data);
+      print(model);
+      // print(model.name);
+      return model;
+    }
+    else
+    {
+      print(response.statusCode);
+      return null;
+    }
+
+  }
+
+  late WeatherModel _weather;
+  late WeatherModel2 _weather2;
+  bool _loading = false;
+
   @override
-  void initState() {
+  /*void initState() {
+    _loading = true;
     super.initState();
-    _getPermissions();
-    _getCurrentLocation();
+    _getPermissions().then((value) => _getCurrentLocation().then((value) => WeatherApiCall().then((value){setState(() {_weather = value!; _loading = false;});})));
+
+  }*/
+  void initState() {
+    _loading = true;
+    super.initState();
+    _getPermissions().then((value) =>
+        _getCurrentLocation().then((value) =>
+            WeatherApiCall().then((value)
+            {
+              //setState(()
+              //{
+                _weather = value!;
+                // _loading = false;
+                Days5WeatherApiCall().then((value) => {
+                setState((){
+                _weather2=value!;
+                _loading=false;
+                })
+                    //});
+                    // }
+                    // }
+                }
+              );
+            }),),);
 
   }
   /*void initState ()
@@ -109,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 50,
         child: ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blue.shade200)
+              backgroundColor: MaterialStateProperty.all(Colors.blue.shade200)
           ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const DashBoardScreen()), (route)=>true);
@@ -120,24 +194,28 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       key:_scaffoldKey,
       resizeToAvoidBottomInset: true,
-      body: Column(
+      body: (_loading==true) ?
+      const Center(
+        child: CircularProgressIndicator(),
+      ):
+      Column(
         children: [
           Container(
-             height: MediaQuery.of(context).size.height*0.42,
-              decoration: const BoxDecoration(
-                  image:DecorationImage(
-                    image:AssetImage("images/cloud.jpg",),
-                    opacity: 0.7,
-                    fit:BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  )
-              ),child:Stack(
+            height: MediaQuery.of(context).size.height*0.42,
+            decoration: const BoxDecoration(
+                image:DecorationImage(
+                  image:AssetImage("images/cloud.jpg",),
+                  opacity: 0.7,
+                  fit:BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                )
+            ),child:Stack(
             children:
             [
-             /* Padding(
+              /* Padding(
                 padding: const EdgeInsets.only(top:100, left:20, right:20),
                 child: TextField(
                   decoration: InputDecoration(
@@ -182,16 +260,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             height:20,
                           ),
-                           const Text(
-                              "Sdfhdshfj",
-                              style:TextStyle(
+                          Text(
+                              _weather.name,
+                              style:const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 23,
                                 fontWeight: FontWeight.bold,
                               )
                           ),
-                          const Text(
-                              'Monday, 24th Aug',
+                          Text(
+                            // 'Monday, 24th Aug',
+                              DateTime.now().toString().substring(0,10),
                               style:TextStyle(
                                 color: Colors.grey,
                                 fontSize: 15,
@@ -207,9 +286,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(left:25),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
                                     Text(
-                                      "Partly Cloudy",
+                                      // "Partly Cloudy",
+                                      _weather.weather[0].main,
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: Colors.grey,
@@ -219,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height:10,
                                     ),
                                     Text(
-                                      "19 \u2103",
+                                      "${_weather.main.temp.toInt()} \u2103",
                                       style: TextStyle(
                                         fontSize: 35,
                                         color: Colors.grey,
@@ -243,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           ),
-       /*   Padding(
+          /*   Padding(
             padding: const EdgeInsets.only(top:90, left:10),
             child: Align(
               alignment: Alignment.centerLeft,
@@ -308,23 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      );
+    );
   }
-}
-
-Future<WeatherModel?> WeatherApiCall()async{
-  var api_url='https://api.openweathermap.org/data/2.5/weather?lat=26.1296084&lon=91.6191235&appid=e4b7e9a7c209d3153d1964b820ffa2f3';
-   var response;
-   print(api_url);
-   response=
-      await http.get(Uri.parse(api_url)).whenComplete((){print(response.body);});
-  //print(response);
-  if (response.statusCode == 200) {
-    WeatherModel model= WeatherModel.fromJson(jsonDecode(response.body));
-    print(model);
-    return model;
-  }
-  else
-    print(response.statusCode);
-
 }

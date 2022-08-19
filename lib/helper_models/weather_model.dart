@@ -211,11 +211,11 @@ class Wind {
     required this.deg,
   });
 
-  int speed;
+  double speed;
   int deg;
 
   factory Wind.fromJson(Map<String, dynamic> json) => Wind(
-    speed: json["speed"],
+    speed: json["speed"].toDouble(),
     deg: json["deg"],
   );
 

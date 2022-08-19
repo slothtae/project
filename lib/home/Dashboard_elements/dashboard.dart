@@ -33,12 +33,15 @@ class DashBoardScreen extends StatelessWidget {
                mainAxisSpacing: 4,
 
           ),
+
           children: [
-            Category_card(image:"images/location.png",text:"Location", skey:_scaffoldKey),
-            Category_card(image:"images/notification.jpg",text:"Notification", skey:_scaffoldKey),
+
+            Category_card(image: "images/sos.jpg",text:"SOS", skey: _scaffoldKey,),
             Category_card(image:"images/camera.png",text:"Reporting", skey: _scaffoldKey),
-            Category_card(image:"images/house.jpg",text:"After Flood reporting", skey:_scaffoldKey),
             Category_card(image: "images/profile.jpg",text:"Profile", skey: _scaffoldKey,),
+            Category_card(image:"images/notification.jpg",text:"Notification", skey:_scaffoldKey),
+            Category_card(image:"images/house.jpg",text:"After Flood reporting", skey:_scaffoldKey),
+            Category_card(image:"images/location.png",text:"Location", skey:_scaffoldKey),
             Category_card(image: "images/settings.png",text:"Settings", skey: _scaffoldKey,),
           ],
         ),
