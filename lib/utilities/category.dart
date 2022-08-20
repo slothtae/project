@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:terra_vision/home/Dashboard_elements/profile.dart';
-import 'package:terra_vision/home/Dashboard_elements/location.dart';
 import '../home/Dashboard_elements/reporting_camera.dart';
 
 class Category_card extends StatelessWidget {
