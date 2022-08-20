@@ -1,16 +1,9 @@
-# terra_vision
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Just the map part
+add dependencies:
+1.google_map_flutter
+2.firebase_core
+3.firebase_database
+Create SHA1 and add to firebase and mapapi
+check site: https://pub.dev/packages/google_maps_flutter
+set rule so that anyone can access for realtime database
+and API to AndroidManifest.xml
