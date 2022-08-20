@@ -7,6 +7,8 @@
         android:label="terra_vision"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+	           android:value="AIzaSyAR40_PCWmGuhXqDvU2Q1vFJ1x82-29HuQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
