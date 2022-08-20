@@ -7,3 +7,4 @@ Create SHA1 and add to firebase and mapapi
 check site: https://pub.dev/packages/google_maps_flutter
 set rule so that anyone can access for realtime database
 and API to AndroidManifest.xml
+Includes just the location.dart
