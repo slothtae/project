@@ -74,12 +74,6 @@ class Category_card extends StatelessWidget {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Profile()), (route)=>true);
 
           }
-       else if(text=="Location")
-          {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=> Location()), (route)=>true);
-
-          }
-
       },
       child: Padding(
         padding: const EdgeInsets.only(left:8, right:8),
