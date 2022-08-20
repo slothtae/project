@@ -1,9 +1,7 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:terra_vision/home/Dashboard_elements/profile.dart';
-
+import 'package:terra_vision/home/Dashboard_elements/location.dart';
 import '../home/Dashboard_elements/reporting_camera.dart';
 
 class Category_card extends StatelessWidget {
@@ -76,7 +74,11 @@ class Category_card extends StatelessWidget {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Profile()), (route)=>true);
 
           }
+       else if(text=="Location")
+          {
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=> Location()), (route)=>true);
 
+          }
 
       },
       child: Padding(
