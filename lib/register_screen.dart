@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:terra_vision/otp.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -176,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                         onPressed: (){
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const RegisterScreen()), (route)=>true);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const OtpScreen()), (route)=>true);
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty
